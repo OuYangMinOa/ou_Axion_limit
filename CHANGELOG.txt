@@ -1,6 +1,6 @@
 Change log
 ===========
 
-0.0.1 (19/04/2020)
+0.3 (29/09/2021)
 -------------------
-- First Release
+- new function : find_limit
