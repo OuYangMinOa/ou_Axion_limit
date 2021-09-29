@@ -66,34 +66,42 @@ class Glimit:
     def g_gamma(self):
         return  (pi * self.big_A * self.big_A) * self.g_a_gamma() / self.ma / self.alpha   * 1e-9    
     
+    # convert G_a_gamma_gamma to G_gamma
+    def to_g_gamma(self,x):
+        return (pi * self.big_A * self.big_A) * x / self.ma / self.alpha   * 1e-9
+
+
     def ksvz_g_a_gamma(self):
         return 0.97 * self.ma * self.alpha /(pi * self.big_A * self.big_A)  * 1e9
         
     def information(self):
         self.calculate()
         print("|","="*18,"Parameter","="*14)
-        print(f"| f = {self.f:.5e} (Frequency [Hz])")
-        print(f"| B = {self.B:.5f} (Magnetic[T])")
-        print(f"| V = {self.V:.5e} (Cavity Volume [L])")
-        print(f"| Q = {self.Q:.5f} (Q factor)")
-        print(f"| T = {self.T:.5f} (Noise temp [k])\n|")
+        print(f"| f = {self.f:10.3e} (Frequency [Hz])")
+        print(f"| B = {self.B:10.3f} (Magnetic[T])")
+        print(f"| V = {self.V:10.3e} (Cavity Volume [L])")
+        print(f"| Q = {self.Q:10.3f} (Q factor)")
+        print(f"| T = {self.T:10.3f} (Noise temp [k])")
+        print(f"| t = {self.t:10.3f} (Integration time [s])")
         print("|","="*18,f"OUR (SNR = {self.SNR:d})","="*10)
         print(f"| g_a_gamma = {self.g_a_gamma() } GeV^-1")
-        print(f"| g_gamma   = {self.g_gamma()}\n|")
+        print(f"| g_gamma   = {self.g_gamma()}")
         print("|","="*18,f"KSVZ (SNR = {self.SNR:d})","="*9)
         print("|",f"ksvz_g_a_gamma = {self.ksvz_g_a_gamma()} GeV^-1")
-        print("|",f"ksvz_g_gamma   = {self.ksvz_g_gamma}\n|")
+        print("|",f"ksvz_g_gamma   = {self.ksvz_g_gamma}")
         print("|","="*43)
+        print()
 
-
+    # Find the  scan range and integration time with given target limit
     def find_limit(self,target):
         
-        print("|","="*18,"Parameter","="*14)
-        print(f"| f = {self.f:.5e} (Frequency [Hz])")
-        print(f"| B = {self.B:.5f} (Magnetic[T])")
-        print(f"| V = {self.V:.5e} (Cavity Volume [L])")
-        print(f"| Q = {self.Q:.5f} (Q factor)")
-        print(f"| T = {self.T:.5f} (Noise temp [k])")
+        print("|","="*14,"Parameter","="*18)
+        print(f"| f = {self.f:10.3e} (Frequency [Hz])")
+        print(f"| B = {self.B:10.3f} (Magnetic[T])")
+        print(f"| V = {self.V:10.3e} (Cavity Volume [L])")
+        print(f"| Q = {self.Q:10.3f} (Q factor)")
+        print(f"| T = {self.T:10.3f} (Noise temp [k])")
+        print("|","="*43)
         print("\n")
         print("[*] Total time : ",self.total_time)
         print("[*] Seaching limit :",target ,"times KSVZ limit")
@@ -154,7 +162,8 @@ class Glimit:
         with np.errstate(divide='ignore'):
             g_a_gamma = sqrt(self.sigma*5/self.shift/y) * 1e9
 
-        g_gamma = (pi * self.big_A * self.big_A) * g_a_gamma / self.ma / self.alpha   * 1e-9
+        g_gamma = self.to_g_gamma(g_a_gamma)
+        #  (pi * self.big_A * self.big_A) * g_a_gamma / self.ma / self.alpha   * 1e-9
         # print(min(g_gamma/0.97))
 
         new_t = self.t * ( min(g_gamma/0.97) / target)  **4
@@ -163,7 +172,7 @@ class Glimit:
         print(f"\t Cold down   : {self.cooling:7.2f} [seconds]")
         print(f"\t Total time  : {self.total_time/3600:7.2f} [hours]")
         print(f"\t Step size   : {self.f / self.Q / 2*1e-3:7.2f} [kHz]")
-        print(f"\t Move rod    : {self.total_time / (new_t + self.cooling):7.2f} [steps]")
+        print(f"\t Move rod    : {self.total_time / (new_t + self.cooling):7.2f} [steps] (should be a convert to a integer)")
         print(f"\t Total scan  : {self.total_time / (new_t + self.cooling) * self.f / self.Q / 2*1e-6:7.2f} [MHz]")
 
 
@@ -192,10 +201,10 @@ class Glimit:
         title(f"Best value : {max_ratio:.3f} ")
         plot(x*1e-9,g_gamma/0.97,label="This experiment")
 
-        plot(x*1e-9,abs(g.ksvz_g_gamma +x*0)/0.97,"b--",label="KSVZ")
-        plot(x*1e-9,abs(g.dfsz_g_gamma +x*0)/0.97,"r--",label="DFSZ")
+        plot(x*1e-9,abs(self.ksvz_g_gamma +x*0)/0.97,"b--",label="KSVZ")
+        plot(x*1e-9,abs(self.dfsz_g_gamma +x*0)/0.97,"r--",label="DFSZ")
         upper = 4
-        down  = abs(g.dfsz_g_gamma +x*0)/abs(g.ksvz_g_gamma) / 4
+        down  = abs(self.dfsz_g_gamma +x*0)/abs(self.ksvz_g_gamma) / 4
         fill_between(x*1e-9,upper,down,color="yellow",label="model region")
 
         xlabel(f"Freq [GHz]")
@@ -224,4 +233,7 @@ if __name__ == "__main__":
     g.Scanshi = 2e6
     g.delta_w = 5000
     g.delta_v = 1000
-    g.find_limit(4)
+    g.information()
+    print(g.to_g_gamma(1.3e-13))
+
+    g.find_limit(10)

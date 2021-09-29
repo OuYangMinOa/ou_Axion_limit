@@ -1,6 +1,10 @@
 Change log
 ===========
 
-0.3 (29/09/2021)
+0.4 (29/09/2021)
 -------------------
-- new function : find_limit
+- new function : 
+	1. find_limit
+		Find the scan range and integration time with given limit
+	2. to_g_gamma:
+		convert G_a_gamma_gamma to G_gamma
