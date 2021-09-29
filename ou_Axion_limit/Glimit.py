@@ -54,6 +54,8 @@ class Glimit:
         self.V * self.w* self.cm * self.Q *self.beta / (1+self.beta)
         
     def cal_single_point(self):
+        self.w     = 2*pi*(self.f)
+        self.ma    = self.h_bar * self.w
         self.Na    = self.delta_v * self.t
         self.Ns    = 1
         self.sigma = self.k * self.T * self.delta_w/sqrt(self.Na) 
@@ -163,6 +165,7 @@ class Glimit:
             g_a_gamma = sqrt(self.sigma*5/self.shift/y) * 1e9
 
         g_gamma = self.to_g_gamma(g_a_gamma)
+
         #  (pi * self.big_A * self.big_A) * g_a_gamma / self.ma / self.alpha   * 1e-9
         # print(min(g_gamma/0.97))
 
@@ -228,12 +231,9 @@ if __name__ == "__main__":
     g.f    = 4.74e9
     g.beta = 2
     g.cooling = 5 * 60
-    g.Scanran = 2e6
-    g.Scanwin = 2e6
-    g.Scanshi = 2e6
     g.delta_w = 5000
     g.delta_v = 1000
     g.information()
-    print(g.to_g_gamma(1.3e-13))
+    # print(g.to_g_gamma(1.3e-13))
 
     g.find_limit(10)
