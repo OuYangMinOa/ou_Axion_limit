@@ -87,15 +87,23 @@ from ou_Axion_limit import analyse
 
 analyse a normal distribution
 
+### analyse(data)
+
 ```
 data = np.random.normal(1,1,2000)
 an = analyse(data)
 print(an.mu, an.sigma)
+```
+### an.histogram(cut)
+
+Plot the histogram with matplotlib
+
+```
 figure()
 subplot(211)
 title("data")
 plot(data)
 subplot(212)
-an.histogram(1.645)
+an.histogram(cut = 1.645)
 show()
 ```
