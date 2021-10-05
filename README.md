@@ -6,6 +6,9 @@ ou_Axion_limit is a package for calculate the Axion limit
 pip install ou-Axion-limit
 `
 # Usage
+
+## Glimit
+
 Input you experiment parameter as this way
 ```
 from ou_Axion_limit.Glimit import Glimit
@@ -21,10 +24,11 @@ g.cooling = 5 * 60
 g.delta_w = 5000
 g.delta_v = 1000
 ```
-## g.information()
+### g.information()
 It gives you the limit and few parameters
 ```
 g.information()
+
 | ================== Parameter ==============
 | f =  4.740e+09 (Frequency [Hz])
 | B =      8.000 (Magnetic[T])
@@ -40,16 +44,17 @@ g.information()
 | ksvz_g_gamma   = -0.97
 | ===========================================
 ```
-## g.to_g_gamma(x)
+### g.to_g_gamma(x)
 convert G_a_gamma_gamma to G_gamma
 ```
 print(g.to_g_gamma(1.3e-13))
 7.367
 ```
-## g.find_limit(10)
+### g.find_limit(10)
 Find the integration time with given numbers of KSVZ limit (10 is means 10 times G_KSVZ ), and it will plot a figure to you
 ```
 g.find_limit(10)
+
 | ============== Parameter ==================
 | f =  4.740e+09 (Frequency [Hz])
 | B =      8.000 (Magnetic[T])

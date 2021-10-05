@@ -2,6 +2,7 @@
 CHANGELOG.txt
 License.txt
 README.txt
-__init__.py
 setup.py
+ou_Axion_limit\Analy.py
 ou_Axion_limit\Glimit.py
+ou_Axion_limit\__init__.py
