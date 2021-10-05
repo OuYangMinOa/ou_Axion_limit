@@ -1,5 +1,5 @@
 # ou_Axion_limit
-ou_Axion_limit is a package for calculate the Axion limit
+ou_Axion_limit is a package for calculate the Axion limit and analyse normal distribution
 
 # Download
 `
@@ -11,7 +11,7 @@ pip install ou-Axion-limit
 
 Input you experiment parameter as this way
 ```
-from ou_Axion_limit.Glimit import Glimit
+from ou_Axion_limit import Glimit
 g = Glimit()
 g.B    = 8
 g.Q    = 30000
@@ -73,4 +73,29 @@ g.find_limit(10)
 	 Step size   :   79.00 [kHz]
 	 Move rod    :  799.53 [steps] (should be a convert to a integer)
 	 Total scan  :   63.16 [MHz]
+```
+
+## analyse
+
+import some useful package
+
+```
+from matplotlib.pyplot import *
+from numpy import *
+from ou_Axion_limit import analyse
+```
+
+analyse a normal distribution
+
+```
+data = np.random.normal(1,1,2000)
+an = analyse(data)
+print(an.mu, an.sigma)
+figure()
+subplot(211)
+title("data")
+plot(data)
+subplot(212)
+an.histogram(1.645)
+show()
 ```
