@@ -6,3 +6,7 @@ setup.py
 ou_Axion_limit\Analy.py
 ou_Axion_limit\Glimit.py
 ou_Axion_limit\__init__.py
+ou_Axion_limit.egg-info\SOURCES.txt
+ou_Axion_limit.egg-info\dependency_links.txt
+ou_Axion_limit.egg-info\requires.txt
+ou_Axion_limit.egg-info\top_level.txt
